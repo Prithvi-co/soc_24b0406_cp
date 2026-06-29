@@ -1,0 +1,37 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n;
+    cin >> n;
+
+    vector<pair<int, int>> movies;
+
+    for (int i = 0; i < n; i++) {
+        int a, b;
+        cin >> a >> b;
+        movies.push_back({b, a}); // {end, start}
+    }
+
+    sort(movies.begin(), movies.end());
+
+    int ans = 0;
+    int lastEnd = 0;
+
+    for (auto &movie : movies) {
+        int end = movie.first;
+        int start = movie.second;
+
+        if (start >= lastEnd) {
+            ans++;
+            lastEnd = end;
+        }
+    }
+
+    cout << ans << "\n";
+
+    return 0;
+}
