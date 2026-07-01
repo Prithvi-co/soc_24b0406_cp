@@ -1,0 +1,56 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+vector<int> p;
+
+void solve(int l, int r) {
+    if (l > r) return;
+    if (l == r) {
+        p[l] = l;
+        return;
+    }
+
+    int pw = 1;
+    while ((pw << 1) <= r) pw <<= 1;
+
+    int all = (pw << 1) - 1;
+
+    int L = max(l, all - r);
+    int R = min(r, all - l);
+
+    for (int x = L; x <= R; x++) {
+        p[x] = all - x;
+        p[all - x] = x;
+    }
+
+    solve(l, L - 1);
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int T;
+    cin >> T;
+
+    while (T--) {
+        int l, r;
+        cin >> l >> r;
+
+        p.assign(r + 1, 0);
+
+        solve(l, r);
+
+        long long ans = 0;
+        for (int i = l; i <= r; i++)
+            ans += (p[i] | i);
+
+        cout << ans << "\n";
+
+        for (int i = l; i <= r; i++)
+            cout << p[i] << " ";
+        cout << "\n";
+    }
+
+    return 0;
+}
