@@ -1,0 +1,49 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int T;
+    cin >> T;
+
+    while (T--) {
+        int n, k;
+        cin >> n >> k;
+
+        vector<int> a(k, 0);
+
+        if (k & 1) {
+            // Odd k: all n's
+            for (int i = 0; i < k; i++)
+                cout << n << (i + 1 == k ? '\n' : ' ');
+            continue;
+        }
+
+        int loose = 0;
+
+        for (int bit = 30; bit >= 0; bit--) {
+            if ((n >> bit) & 1) {
+                // Need an odd number of 1s.
+                // Put 1 in all except one "tight" number.
+                for (int i = 0; i < k; i++) {
+                    if (i != min(loose, k - 1))
+                        a[i] |= (1 << bit);
+                }
+                if (loose < k)
+                    loose++;
+            } else {
+                // Need an even number of 1s.
+                // Only loose numbers may receive 1s.
+                for (int i = 0; i < (loose / 2) * 2; i++)
+                    a[i] |= (1 << bit);
+            }
+        }
+
+        for (int i = 0; i < k; i++)
+            cout << a[i] << (i + 1 == k ? '\n' : ' ');
+    }
+
+    return 0;
+}
