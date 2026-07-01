@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve(int l, int r, vector<int> &p) {
+    if (l == r) return;
+
+    int len = r - l + 1;
+    int pw = 1;
+    while ((pw << 1) < len) pw <<= 1;
+
+    int mid = l + pw - 1;
+
+    for (int i = 0; i < pw; i++) {
+        p[mid + 1 + i] = l + i;
+        p[l + i] = mid + 1 + i;
+    }
+
+    solve(l, mid, p);
+    solve(mid + 1, r, p);
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int T;
+    cin >> T;
+
+    while (T--) {
+        int n;
+        cin >> n;
+
+        if (n % 2 == 0) {
+            cout << -1 << '\n';
+            continue;
+        }
+
+        vector<int> p(n + 1);
+        solve(1, n, p);
+
+        for (int i = 1; i <= n; i++)
+            cout << p[i] << " \n"[i == n];
+    }
+
+    return 0;
+}
