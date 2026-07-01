@@ -1,0 +1,110 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+using int64 = long long;
+
+const int MAXN = 200000;
+
+int spf[MAXN + 1];
+bool prime[MAXN + 1];
+
+struct Info {
+    bool semi = false;
+    int p = 0, q = 0;   // if p==q => p^2
+};
+
+Info info[MAXN + 1];
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    // SPF sieve
+    for (int i = 0; i <= MAXN; i++) spf[i] = i;
+    for (int i = 2; i * i <= MAXN; i++) {
+        if (spf[i] == i) {
+            for (int j = i * i; j <= MAXN; j += i)
+                if (spf[j] == j) spf[j] = i;
+        }
+    }
+
+    for (int i = 2; i <= MAXN; i++)
+        prime[i] = (spf[i] == i);
+
+    // classify semiprimes
+    for (int x = 2; x <= MAXN; x++) {
+        int t = x;
+        vector<pair<int,int>> fac;
+
+        while (t > 1) {
+            int p = spf[t];
+            int e = 0;
+            while (t % p == 0) {
+                t /= p;
+                e++;
+            }
+            fac.push_back({p, e});
+        }
+
+        int tot = 0;
+        for (auto &v : fac) tot += v.second;
+
+        if (tot != 2) continue;
+
+        info[x].semi = true;
+
+        if (fac.size() == 1) {
+            info[x].p = fac[0].first;
+            info[x].q = fac[0].first;
+        } else {
+            info[x].p = fac[0].first;
+            info[x].q = fac[1].first;
+        }
+    }
+
+    int T;
+    cin >> T;
+
+    while (T--) {
+        int n;
+        cin >> n;
+
+        vector<int> freq(n + 1, 0);
+
+        for (int i = 0; i < n; i++) {
+            int x;
+            cin >> x;
+            freq[x]++;
+        }
+
+        int64 ans = 0;
+
+        for (int x = 2; x <= n; x++) {
+            if (!info[x].semi) continue;
+
+            int p = info[x].p;
+            int q = info[x].q;
+
+            if (p == q) {
+                int64 a = freq[p];
+                int64 b = freq[x];
+
+                ans += a * b;
+                ans += b * (b + 1) / 2;
+            } else {
+                int64 fp = freq[p];
+                int64 fq = freq[q];
+                int64 fs = freq[x];
+
+                ans += fp * fq;
+                ans += fp * fs;
+                ans += fq * fs;
+                ans += fs * (fs + 1) / 2;
+            }
+        }
+
+        cout << ans << '\n';
+    }
+
+    return 0;
+}
