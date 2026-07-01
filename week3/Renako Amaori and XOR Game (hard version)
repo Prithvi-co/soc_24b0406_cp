@@ -1,0 +1,60 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int T;
+    cin >> T;
+
+    while (T--) {
+        int n;
+        cin >> n;
+
+        vector<int> a(n + 1), b(n + 1);
+
+        int xa = 0, xb = 0;
+
+        for (int i = 1; i <= n; i++) {
+            cin >> a[i];
+            xa ^= a[i];
+        }
+
+        for (int i = 1; i <= n; i++) {
+            cin >> b[i];
+            xb ^= b[i];
+        }
+
+        for (int i = 1; i <= n; i++) {
+            int d = a[i] ^ b[i];
+
+            if (i & 1) {
+                
+                int nxa = xa ^ d;
+                int nxb = xb ^ d;
+                if (nxa > nxb && xa <= xb) {
+                    xa = nxa;
+                    xb = nxb;
+                }
+            } else {
+                
+                int nxa = xa ^ d;
+                int nxb = xb ^ d;
+                if (nxb > nxa && xb <= xa) {
+                    xa = nxa;
+                    xb = nxb;
+                }
+            }
+        }
+
+        if (xa > xb)
+            cout << "Ajisai\n";
+        else if (xb > xa)
+            cout << "Mai\n";
+        else
+            cout << "Tie\n";
+    }
+
+    return 0;
+}
