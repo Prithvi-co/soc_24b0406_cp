@@ -1,0 +1,48 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int T;
+    cin >> T;
+
+    while (T--) {
+        string s;
+        cin >> s;
+
+        int sum = 0;
+        for (char c : s) sum += c - '0';
+
+        if (sum <= 9) {
+            cout << 0 << '\n';
+            continue;
+        }
+
+        int need = sum - 9;
+        vector<int> reduce;
+
+        for (int i = 0; i < (int)s.size(); i++) {
+            int d = s[i] - '0';
+            if (i == 0)
+                reduce.push_back(d - 1); // first digit can't become 0
+            else
+                reduce.push_back(d);     // others can become 0
+        }
+
+        sort(reduce.rbegin(), reduce.rend());
+
+        int ans = 0;
+        int cur = 0;
+        for (int x : reduce) {
+            cur += x;
+            ans++;
+            if (cur >= need) break;
+        }
+
+        cout << ans << '\n';
+    }
+
+    return 0;
+}
