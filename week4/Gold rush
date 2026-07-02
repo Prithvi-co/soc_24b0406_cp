@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+
+ll m;
+
+bool dfs(ll x) {
+    if (x == m) return true;
+    if (x < m) return false;
+    if (x % 3 != 0) return false;
+
+    return dfs(x / 3) || dfs(2 * x / 3);
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int T;
+    cin >> T;
+
+    while (T--) {
+        ll n;
+        cin >> n >> m;
+
+        cout << (dfs(n) ? "YES" : "NO") << '\n';
+    }
+
+    return 0;
+}
