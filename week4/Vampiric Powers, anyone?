@@ -1,0 +1,43 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int T;
+    cin >> T;
+
+    while (T--) {
+        int n;
+        cin >> n;
+
+        vector<int> a(n);
+        for (int &x : a) cin >> x;
+
+        vector<int> basis(8, 0);
+
+        int suf = 0;
+        for (int i = n - 1; i >= 0; i--) {
+            suf ^= a[i];
+            int x = suf;
+            for (int b = 7; b >= 0; b--) {
+                if (!(x & (1 << b))) continue;
+                if (!basis[b]) {
+                    basis[b] = x;
+                    break;
+                }
+                x ^= basis[b];
+            }
+        }
+
+        int ans = 0;
+        for (int b = 7; b >= 0; b--) {
+            ans = max(ans, ans ^ basis[b]);
+        }
+
+        cout << ans << '\n';
+    }
+
+    return 0;
+}
