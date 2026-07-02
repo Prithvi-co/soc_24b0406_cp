@@ -1,0 +1,53 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+using int64 = long long;
+
+vector<pair<int,int>> top3(vector<int>& v) {
+    vector<pair<int,int>> best;
+
+    for (int i = 0; i < (int)v.size(); i++) {
+        best.push_back({v[i], i});
+        sort(best.begin(), best.end(), greater<pair<int,int>>());
+        if (best.size() > 3) best.pop_back();
+    }
+    return best;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int T;
+    cin >> T;
+
+    while (T--) {
+        int n;
+        cin >> n;
+
+        vector<int> a(n), b(n), c(n);
+
+        for (int &x : a) cin >> x;
+        for (int &x : b) cin >> x;
+        for (int &x : c) cin >> x;
+
+        auto A = top3(a);
+        auto B = top3(b);
+        auto C = top3(c);
+
+        int64 ans = 0;
+
+        for (auto [va, ia] : A) {
+            for (auto [vb, ib] : B) {
+                for (auto [vc, ic] : C) {
+                    if (ia != ib && ia != ic && ib != ic)
+                        ans = max(ans, 1LL * va + vb + vc);
+                }
+            }
+        }
+
+        cout << ans << '\n';
+    }
+
+    return 0;
+}
